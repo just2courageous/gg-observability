@@ -1,1 +1,51 @@
 # values for kube-prometheus-stack
+# values for kube-prometheus-stack (release: kps)
+
+defaultRules:
+  create: true
+
+grafana:
+  # 🔐 read admin creds from an existing Secret (we'll create it next)
+  admin:
+    existingSecret: kps-grafana-admin   # keys: admin-user, admin-password
+    existingSecretUserKey: admin-user
+    existingSecretPasswordKey: admin-password
+  service:
+    type: ClusterIP
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+nodeExporter:
+  resources:
+    requests:
+      cpu: 30m
+      memory: 64Mi
+
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+
+prometheus:
+  prometheusSpec:
+    retention: 12h
+    resources:
+      requests:
+        cpu: 150m
+        memory: 512Mi
