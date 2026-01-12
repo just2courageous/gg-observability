@@ -1,0 +1,39 @@
+// Observability Stack
+digraph "gg-observability" {
+	bgcolor="#121212" fontcolor="#E0E0E0" fontname=Verdana fontsize=20 nodesep=0.6 pad=0.5 rankdir=LR ranksep=1.0 splines=ortho
+	node [color="#333333" fillcolor="#1E1E1E" fontcolor="#FFFFFF" fontname=Verdana fontsize=12 shape=rect style="filled,rounded"]
+	edge [color="#666666" fontcolor="#AAAAAA" fontname=Verdana fontsize=10]
+	subgraph cluster_access {
+		color="#444444" fontcolor="#888888" label="Local Access (No Ingress)" style=dotted
+		browser [label="User Browser
+(localhost)" fillcolor="#0D47A1" shape=circle]
+		port_forward [label="kubectl port-forward" fillcolor="#1B5E20" shape=parallelogram]
+	}
+	subgraph cluster_aws {
+		color="#FF9900" fontcolor="#FF9900" label=AWS style=dashed
+		subgraph cluster_eks {
+			color="#2E7D32" fontcolor="#81C784" label="EKS Cluster" style=rounded
+			subgraph cluster_monitoring {
+				color="#0277BD" fillcolor="#181818" fontcolor="#4FC3F7" label="Namespace: monitoring" style=filled
+				operator [label="Prometheus Operator" fillcolor="#D84315"]
+				prom [label="Prometheus
+(release: kps)" fillcolor="#E65100" penwidth=2]
+				alertmanager [label=Alertmanager fillcolor="#BF360C"]
+				grafana [label="Grafana
+(Admin Secret: kps-grafana-admin)" fillcolor="#F4511E"]
+				ksm [label="kube-state-metrics" fillcolor="#1565C0"]
+				node_exporter [label="node-exporter" fillcolor="#1565C0"]
+				demo_alerts [label="PrometheusRule
+\"demo-alerts\"" fillcolor="#4A148C" shape=note]
+			}
+		}
+	}
+	browser -> port_forward
+	port_forward -> grafana [label="tunnel :3000" color="#F4511E"]
+	port_forward -> prom [label="tunnel :9090" color="#E65100"]
+	node_exporter -> prom [label="scrape metrics"]
+	ksm -> prom [label="scrape k8s stats"]
+	demo_alerts -> prom [label="rule evaluation" style=dashed]
+	prom -> alertmanager [label="firing alerts"]
+	grafana -> prom [label="query (PromQL)"]
+}

@@ -1,0 +1,87 @@
+<mxfile host="app.diagrams.net" modified="2026-01-11T00:00:00.000Z" agent="Mozilla/5.0" version="22.1.0" type="device">
+  <diagram id="gg-observability" name="Page-1" compressed="false">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+
+        <!-- Background -->
+        <mxCell id="bg" value="" style="shape=rectangle;fillColor=#0b1220;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1600" height="900" as="geometry"/>
+        </mxCell>
+
+        <!-- Title -->
+        <mxCell id="t1" value="GG Observability: kube-prometheus-stack on EKS" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=16;fontStyle=1;fontColor=#ffffff" vertex="1" parent="1">
+          <mxGeometry x="330" y="25" width="940" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- You -->
+        <mxCell id="you" value="You&#10;(port-forward)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#111827;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="1">
+          <mxGeometry x="70" y="150" width="220" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- AWS container -->
+        <mxCell id="aws" value="AWS [Amazon Web Services]" style="swimlane;html=1;rounded=1;startSize=28;horizontal=1;whiteSpace=wrap;fillColor=#0f172a;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="1">
+          <mxGeometry x="320" y="95" width="1220" height="640" as="geometry"/>
+        </mxCell>
+
+        <!-- EKS -->
+        <mxCell id="eks" value="EKS [Elastic Kubernetes Service]&#10;Cluster" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#111827;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="aws">
+          <mxGeometry x="40" y="70" width="260" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Monitoring namespace -->
+        <mxCell id="mon" value="Kubernetes [Container Orchestration]&#10;namespace: monitoring" style="swimlane;html=1;rounded=1;startSize=26;horizontal=1;whiteSpace=wrap;fillColor=#0b1020;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="aws">
+          <mxGeometry x="330" y="170" width="840" height="420" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="prom" value="Prometheus&#10;(scrape + TSDB)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#111827;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="mon">
+          <mxGeometry x="90" y="110" width="220" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="graf" value="Grafana&#10;(dashboards + alerts UI)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#111827;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="mon">
+          <mxGeometry x="90" y="230" width="220" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="op" value="Prometheus Operator" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#111827;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="mon">
+          <mxGeometry x="350" y="110" width="220" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="rule" value="PrometheusRule [Custom Resource]&#10;(k8s/alerts-demo.yaml)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#111827;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="mon">
+          <mxGeometry x="350" y="230" width="220" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="am" value="Alertmanager&#10;(routes)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#111827;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="mon">
+          <mxGeometry x="610" y="110" width="220" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tgt" value="Targets&#10;(kube-state-metrics, node-exporter, workloads)" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=#111827;strokeColor=#334155;fontColor=#ffffff" vertex="1" parent="mon">
+          <mxGeometry x="610" y="230" width="220" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" value="kubectl port-forward" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#94a3b8;fontColor=#ffffff" edge="1" parent="1" source="you" target="graf">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="kubectl port-forward" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#94a3b8;fontColor=#ffffff" edge="1" parent="1" source="you" target="prom">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="manages" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#94a3b8;fontColor=#ffffff" edge="1" parent="mon" source="op" target="prom">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" value="load rules" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#94a3b8;fontColor=#ffffff" edge="1" parent="mon" source="rule" target="prom">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" value="metrics scrape" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#94a3b8;fontColor=#ffffff" edge="1" parent="mon" source="tgt" target="prom">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" value="alerts" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#94a3b8;fontColor=#ffffff" edge="1" parent="mon" source="prom" target="am">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" value="query" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#94a3b8;fontColor=#ffffff" edge="1" parent="mon" source="prom" target="graf">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
